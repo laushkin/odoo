@@ -15,6 +15,7 @@ import tempfile
 import odoo
 from .. import release, conf, loglevels
 from . import appdirs
+from ast import literal_eval
 
 from passlib.context import CryptContext
 crypt_context = CryptContext(schemes=['pbkdf2_sha512', 'plaintext'],
@@ -495,10 +496,12 @@ class configmanager(object):
             else ""
         )
 
-        self.options['init'] = opt.init and dict.fromkeys(opt.init.split(','), 1) or {}
+        # self.options['init'] = opt.init and dict.fromkeys(opt.init.split(','), 1) or {}
+        self.options['init'] = literal_eval(self.options['init'])
         self.options['demo'] = (dict(self.options['init'])
                                 if not self.options['without_demo'] else {})
-        self.options['update'] = opt.update and dict.fromkeys(opt.update.split(','), 1) or {}
+        # self.options['update'] = opt.update and dict.fromkeys(opt.update.split(','), 1) or {}
+        self.options['update'] = literal_eval(self.options['update'])
         self.options['translate_modules'] = opt.translate_modules and [m.strip() for m in opt.translate_modules.split(',')] or ['all']
         self.options['translate_modules'].sort()
 
